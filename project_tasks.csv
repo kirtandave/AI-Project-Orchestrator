@@ -1,0 +1,11 @@
+Task_ID,Workstream,Task_Name,Planned_Start,Planned_End,Current_Owner,Skill_Required,Complexity,Effort_Days,Progress_Percent,Status,Dependency_Type,Blocker_Flag,Priority
+T001,Data Migration,Customer Master Data Mapping,2026-06-01,2026-06-07,Rahul,Data Migration,Medium,5,90,In Progress,Internal,No,High
+T002,Data Migration,Opening Balance Load,2026-06-08,2026-06-15,Amit,Finance,High,7,40,In Progress,Internal,Yes,Critical
+T003,Integration,Salesforce to D365 API Testing,2026-06-05,2026-06-12,Neha,Integration,High,6,35,Delayed,Vendor,Yes,Critical
+T004,Integration,Payment Gateway SIT,2026-06-10,2026-06-18,Sameer,Integration,High,8,20,Not Started,Vendor,Yes,High
+T005,UAT,Finance UAT Round 1,2026-06-16,2026-06-25,Priya,Finance,Medium,7,0,Not Started,Internal,No,High
+T006,UAT,Student Registration UAT,2026-06-16,2026-06-25,Anil,Functional,Medium,7,15,In Progress,Business,No,Medium
+T007,Reports,Power BI Executive Dashboard,2026-06-12,2026-06-20,John,Reporting,Medium,6,50,In Progress,Internal,No,Medium
+T008,Security,Role Based Access Setup,2026-06-07,2026-06-13,Farah,Security,Low,4,80,In Progress,Internal,No,Medium
+T009,Training,End User Training Material,2026-06-18,2026-06-24,Meera,Training,Low,5,10,Not Started,Business,No,Low
+T010,Cutover,Cutover Plan Finalization,2026-06-22,2026-06-28,Karan,PMO,High,5,0,Not Started,Internal,No,Critical

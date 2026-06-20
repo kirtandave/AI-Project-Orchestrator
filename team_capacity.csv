@@ -1,0 +1,11 @@
+Owner,Primary_Skill,Secondary_Skill,Capacity_Percent,Current_Load,Availability,Location
+Rahul,Data Migration,Finance,80,70,Available,India
+Amit,Finance,Data Migration,70,85,Limited,UAE
+Neha,Integration,Technical,75,90,Limited,India
+Sameer,Integration,Security,80,60,Available,UAE
+Priya,Finance,UAT,90,65,Available,UAE
+Anil,Functional,UAT,85,75,Available,India
+John,Reporting,Power BI,80,50,Available,India
+Farah,Security,Technical,75,55,Available,UAE
+Meera,Training,Functional,70,40,Available,India
+Karan,PMO,Cutover,90,70,Available,UAE
