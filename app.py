@@ -138,17 +138,47 @@ with st.expander("Preview Uploaded / Default Team Capacity"):
 # -----------------------------
 st.sidebar.header("Upload Project Data")
 
-uploaded_tasks_file = st.sidebar.file_uploader(...)
-uploaded_team_file = st.sidebar.file_uploader(...)
+uploaded_tasks_file = st.sidebar.file_uploader(
+    "Upload Project Tasks File",
+    type=["csv", "xlsx"],
+    help="Upload a project task tracker with planned dates, owners, status, blockers, and dependencies."
+)
+
+uploaded_team_file = st.sidebar.file_uploader(
+    "Upload Team Capacity File",
+    type=["csv", "xlsx"],
+    help="Upload team capacity, skills, workload, and availability data."
+)
 
 st.sidebar.header("Scenario Simulator")
 
-vendor_delay_days = st.sidebar.slider(...)
-scope_increase_percent = st.sidebar.slider(...)
-resource_capacity_reduction = st.sidebar.slider(...)
-testing_compression = st.sidebar.slider(...)
+vendor_delay_days = st.sidebar.slider(
+    "Vendor dependency delay days",
+    min_value=0,
+    max_value=20,
+    value=5
+)
 
-# -----------------------------
+scope_increase_percent = st.sidebar.slider(
+    "Scope increase %",
+    min_value=0,
+    max_value=50,
+    value=10
+)
+
+resource_capacity_reduction = st.sidebar.slider(
+    "Resource capacity reduction %",
+    min_value=0,
+    max_value=50,
+    value=10
+)
+
+testing_compression = st.sidebar.slider(
+    "Testing compression %",
+    min_value=0,
+    max_value=30,
+    value=0
+)# -----------------------------
 # AI-style Timeline Prediction
 # -----------------------------
 def calculate_delay(row):
