@@ -18,20 +18,24 @@ st.caption("Predict timelines, recommend owners, and simulate project delivery s
 # -----------------------------
 # File Upload Section
 # -----------------------------
+# -----------------------------
+# File Upload Section
+# -----------------------------
 st.sidebar.header("Upload Project Data")
 
 uploaded_tasks_file = st.sidebar.file_uploader(
     "Upload Project Tasks File",
     type=["csv", "xlsx"],
-    help="Upload a project task tracker with planned dates, owners, status, blockers, and dependencies."
+    help="Upload a project task tracker with planned dates, owners, status, blockers, and dependencies.",
+    key="project_tasks_uploader"
 )
 
 uploaded_team_file = st.sidebar.file_uploader(
     "Upload Team Capacity File",
     type=["csv", "xlsx"],
-    help="Upload team capacity, skills, workload, and availability data."
+    help="Upload team capacity, skills, workload, and availability data.",
+    key="team_capacity_uploader"
 )
-
 
 def read_uploaded_file(uploaded_file, default_csv_path):
     """
@@ -136,20 +140,6 @@ with st.expander("Preview Uploaded / Default Team Capacity"):
 # -----------------------------
 # Sidebar Scenario Controls
 # -----------------------------
-st.sidebar.header("Upload Project Data")
-
-uploaded_tasks_file = st.sidebar.file_uploader(
-    "Upload Project Tasks File",
-    type=["csv", "xlsx"],
-    help="Upload a project task tracker with planned dates, owners, status, blockers, and dependencies."
-)
-
-uploaded_team_file = st.sidebar.file_uploader(
-    "Upload Team Capacity File",
-    type=["csv", "xlsx"],
-    help="Upload team capacity, skills, workload, and availability data."
-)
-
 st.sidebar.header("Scenario Simulator")
 
 vendor_delay_days = st.sidebar.slider(
