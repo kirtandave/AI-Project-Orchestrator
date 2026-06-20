@@ -15,50 +15,138 @@ st.caption("Predict timelines, recommend owners, and simulate project delivery s
 # -----------------------------
 # Load Data
 # -----------------------------
-@st.cache_data
-def load_data():
-    tasks = pd.read_csv("project_tasks.csv")
-    team = pd.read_csv("team_capacity.csv")
+# -----------------------------
+# File Upload Section
+# -----------------------------
+st.sidebar.header("Upload Project Data")
 
-    tasks["Planned_Start"] = pd.to_datetime(tasks["Planned_Start"])
-    tasks["Planned_End"] = pd.to_datetime(tasks["Planned_End"])
+uploaded_tasks_file = st.sidebar.file_uploader(
+    "Upload Project Tasks File",
+    type=["csv", "xlsx"],
+    help="Upload a project task tracker with planned dates, owners, status, blockers, and dependencies."
+)
 
-    return tasks, team
+uploaded_team_file = st.sidebar.file_uploader(
+    "Upload Team Capacity File",
+    type=["csv", "xlsx"],
+    help="Upload team capacity, skills, workload, and availability data."
+)
 
-tasks, team = load_data()
+
+def read_uploaded_file(uploaded_file, default_csv_path):
+    """
+    Reads uploaded CSV/XLSX file.
+    If no file is uploaded, falls back to default dummy CSV.
+    """
+    if uploaded_file is not None:
+        file_name = uploaded_file.name.lower()
+
+        if file_name.endswith(".csv"):
+            return pd.read_csv(uploaded_file)
+
+        elif file_name.endswith(".xlsx"):
+            return pd.read_excel(uploaded_file)
+
+        else:
+            st.error("Unsupported file type. Please upload CSV or Excel file.")
+            st.stop()
+
+    return pd.read_csv(default_csv_path)
+
+
+def validate_columns(df, required_columns, file_label):
+    """
+    Validates required columns for uploaded files.
+    """
+    missing_columns = [col for col in required_columns if col not in df.columns]
+
+    if missing_columns:
+        st.error(
+            f"{file_label} is missing required columns: {', '.join(missing_columns)}"
+        )
+        st.stop()
+
+
+# -----------------------------
+# Required Columns
+# -----------------------------
+required_task_columns = [
+    "Task_ID",
+    "Workstream",
+    "Task_Name",
+    "Planned_Start",
+    "Planned_End",
+    "Current_Owner",
+    "Skill_Required",
+    "Complexity",
+    "Effort_Days",
+    "Progress_Percent",
+    "Status",
+    "Dependency_Type",
+    "Blocker_Flag",
+    "Priority"
+]
+
+required_team_columns = [
+    "Owner",
+    "Primary_Skill",
+    "Secondary_Skill",
+    "Capacity_Percent",
+    "Current_Load",
+    "Availability",
+    "Location"
+]
+
+
+# -----------------------------
+# Load Data
+# -----------------------------
+tasks = read_uploaded_file(uploaded_tasks_file, "project_tasks.csv")
+team = read_uploaded_file(uploaded_team_file, "team_capacity.csv")
+
+validate_columns(tasks, required_task_columns, "Project Tasks File")
+validate_columns(team, required_team_columns, "Team Capacity File")
+
+# Convert date columns
+tasks["Planned_Start"] = pd.to_datetime(tasks["Planned_Start"], errors="coerce")
+tasks["Planned_End"] = pd.to_datetime(tasks["Planned_End"], errors="coerce")
+
+# Validate date conversion
+if tasks["Planned_Start"].isna().any() or tasks["Planned_End"].isna().any():
+    st.error("Planned_Start or Planned_End contains invalid date values. Use format YYYY-MM-DD.")
+    st.stop()
+
+# Clean numeric columns
+tasks["Effort_Days"] = pd.to_numeric(tasks["Effort_Days"], errors="coerce").fillna(0)
+tasks["Progress_Percent"] = pd.to_numeric(tasks["Progress_Percent"], errors="coerce").fillna(0)
+team["Capacity_Percent"] = pd.to_numeric(team["Capacity_Percent"], errors="coerce").fillna(0)
+team["Current_Load"] = pd.to_numeric(team["Current_Load"], errors="coerce").fillna(0)
+
+st.sidebar.success("Data loaded successfully")
+
+# -----------------------------
+# Data Preview
+# -----------------------------
+with st.expander("Preview Uploaded / Default Project Tasks"):
+    st.dataframe(tasks, use_container_width=True)
+
+with st.expander("Preview Uploaded / Default Team Capacity"):
+    st.dataframe(team, use_container_width=True)
 
 # -----------------------------
 # Sidebar Scenario Controls
 # -----------------------------
+st.sidebar.header("Upload Project Data")
+
+uploaded_tasks_file = st.sidebar.file_uploader(...)
+uploaded_team_file = st.sidebar.file_uploader(...)
+
 st.sidebar.header("Scenario Simulator")
 
-vendor_delay_days = st.sidebar.slider(
-    "Vendor dependency delay days",
-    min_value=0,
-    max_value=20,
-    value=5
-)
-
-scope_increase_percent = st.sidebar.slider(
-    "Scope increase %",
-    min_value=0,
-    max_value=50,
-    value=10
-)
-
-resource_capacity_reduction = st.sidebar.slider(
-    "Resource capacity reduction %",
-    min_value=0,
-    max_value=50,
-    value=10
-)
-
-testing_compression = st.sidebar.slider(
-    "Testing compression %",
-    min_value=0,
-    max_value=30,
-    value=0
-)
+vendor_delay_days = st.sidebar.slider(...)
+scope_increase_percent = st.sidebar.slider(...)
+resource_capacity_reduction = st.sidebar.slider(...)
+testing_compression = st.sidebar.slider(...)
 
 # -----------------------------
 # AI-style Timeline Prediction
